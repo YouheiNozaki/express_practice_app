@@ -4,32 +4,16 @@ const express = require('express'),
   app = express(),
   homeController = require('./controllers/homeController'),
   errorController = require('./controllers/errorController'),
+  subscribersController = require('./controllers/subscribersController'),
   layouts = require('express-ejs-layouts'),
-  MongoDB = require('mongodb').MongoClient,
-  dbURL = 'mongodb://localhost:27017',
-  dbName = 'recipe_db';
+  mongoose = require('mongoose');
 
-MongoDB.connect(dbURL, (error, client) => {
-  if (error) throw error;
-  let db = client.db(dbName);
-  db.collection('contacts')
-    .find()
-    .toArray((error, data) => {
-      if (error) throw (error, console.log(data));
-    });
+mongoose.Promise = global.Promise;
 
-  db.collection('contacts').insert(
-    {
-      name: 'Freddie Mercury',
-      email: 'fred@queen.com',
-    },
-    (error, db) => {
-      if (error) throw error;
-      console.log(db);
-    },
-  );
+mongoose.connect('mongodb://localhost27017/confetti_cuisine', {
+  useNewUrlParser: true,
 });
-
+mongoose.set('useCreateIndex', true);
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 
@@ -47,7 +31,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/courses', homeController.showCourses);
-app.get('/contact', homeController.showSignUp);
+app.get('/subscribers', subscribersController.getAllSubscribers);
+app.get('/contact', subscribersController.getSubscriptionPage);
+app.post('/subscribe', subscribersController.saveSubscriber);
 app.post('/contact', homeController.postedSignUpForm);
 
 app.use(errorController.pageNotFoundError);
