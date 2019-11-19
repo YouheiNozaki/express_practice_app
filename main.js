@@ -10,7 +10,7 @@ const express = require('express'),
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost27017/confetti_cuisine', {
+mongoose.connect('mongodb://localhost:27017/confetti_cuisine', {
   useNewUrlParser: true,
 });
 mongoose.set('useCreateIndex', true);
