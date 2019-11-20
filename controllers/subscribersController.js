@@ -1,33 +1,24 @@
 'use strict';
 
-const Subscriber = require('../model/subscriber');
+const Subscriber = require('../models/subscriber');
 
 module.exports = {
-  getAllSubscribers: (req, res) => {
+  index: (req, res, next) => {
     Subscriber.find({})
-      .exec()
       .then(subscribers => {
-        res.render('subscribers', {
-          subscribers: subscribers,
-        });
+        res.locals.subscribers = subscribers;
+        next();
       })
       .catch(error => {
-        console.log(error.message);
-        return [];
-      })
-      .then(() => {
-        console.log('promise complete');
+        console.log(`Error fetching subscribers: ${error.message}`);
+        next(error);
       });
   },
-};
 
-module.exports = {
-  getSubscriptionPage: (req, res) => {
-    res.render('contact');
+  indexView: (req, res) => {
+    res.render('subscribers/index');
   },
-};
 
-module.exports = {
   saveSubscriber: (req, res) => {
     let newSubscriber = new Subscriber({
       name: req.body.name,
@@ -36,11 +27,11 @@ module.exports = {
     });
     newSubscriber
       .save()
-      .then(() => {
+      .then(result => {
         res.render('thanks');
       })
       .catch(error => {
-        res.send(error);
+        if (error) res.send(error);
       });
   },
 };
