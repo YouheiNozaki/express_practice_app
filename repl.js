@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'),
-  Subscriber = require('./models/course');
+  Subscriber = require('./models/subscriber'),
+  Course = require('./models/course');
 
 let testCourse, testSubscriber;
 
