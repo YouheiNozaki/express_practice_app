@@ -54,6 +54,12 @@ router.get(
   subscribersController.index,
   subscribersController.indexView,
 );
+router.get('/subscribers/new', subscribersController.new);
+router.post(
+  '/subscribers/create',
+  subscribersController.create,
+  subscribersController.redirectView,
+);
 
 router.get('/courses', coursesController.index, coursesController.indexView);
 router.get('/courses/new', coursesController.new);
