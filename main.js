@@ -48,6 +48,7 @@ router.post(
   usersController.create,
   usersController.redirectView,
 );
+router.get('/users/:id', usersController.show, usersController.showView);
 
 router.get(
   '/subscribers',
@@ -60,6 +61,11 @@ router.post(
   subscribersController.create,
   subscribersController.redirectView,
 );
+router.get(
+  '/subscribers/:id',
+  subscribersController.show,
+  subscribersController.showView,
+);
 
 router.get('/courses', coursesController.index, coursesController.indexView);
 router.get('/courses/new', coursesController.new);
@@ -68,6 +74,7 @@ router.post(
   coursesController.create,
   coursesController.redirectView,
 );
+router.get('/courses/:id', coursesController.show, coursesController.showView);
 
 router.post('/subscribe', subscribersController.saveSubscriber);
 
