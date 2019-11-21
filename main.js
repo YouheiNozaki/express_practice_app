@@ -9,7 +9,8 @@ const express = require('express'),
   homeController = require('./controllers/homeController'),
   subscribersController = require('./controllers/subscribersController'),
   usersController = require('./controllers/usersController'),
-  coursesController = require('./controllers/coursesController');
+  coursesController = require('./controllers/coursesController'),
+  Subscriber = require('./models/subscriber');
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/recipe_db', {
@@ -55,6 +56,12 @@ router.get(
 );
 
 router.get('/courses', coursesController.index, coursesController.indexView);
+router.get('/courses/new', coursesController.new);
+router.post(
+  '/courses/create',
+  coursesController.create,
+  coursesController.redirectView,
+);
 
 router.post('/subscribe', subscribersController.saveSubscriber);
 
