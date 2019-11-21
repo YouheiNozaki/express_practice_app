@@ -8,8 +8,7 @@ const express = require('express'),
   homeController = require('./controllers/homeController'),
   subscribersController = require('./controllers/subscribersController'),
   usersController = require('./controllers/usersController'),
-  coursesController = require('./controllers/coursesController'),
-  Subscriber = require('./models/subscriber');
+  coursesController = require('./controllers/coursesController');
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/recipe_db', {
