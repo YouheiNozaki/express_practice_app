@@ -5,6 +5,7 @@ const express = require('express'),
   router = express.Router(),
   layouts = require('express-ejs-layouts'),
   mongoose = require('mongoose'),
+  methodOverride = require('method-override'),
   errorController = require('./controllers/errorController'),
   homeController = require('./controllers/homeController'),
   subscribersController = require('./controllers/subscribersController'),
@@ -35,6 +36,11 @@ router.use(
   }),
 );
 
+router.use(
+  methodOverride('_method', {
+    methods: ['POST', 'GET'],
+  }),
+);
 router.use(express.json());
 router.use(homeController.logRequestPaths);
 
