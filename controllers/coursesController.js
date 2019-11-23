@@ -94,6 +94,19 @@ module.exports = {
       });
   },
 
+  delete: (req, res, next) => {
+    let courseId = req.params.id;
+    Course.findByIdAndRemove(courseId)
+      .then(() => {
+        res.locals.redirect = '/courses';
+        next();
+      })
+      .catch(error => {
+        console.log(`Error deleting course by ID: ${error.message}`);
+        next();
+      });
+  },
+
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);

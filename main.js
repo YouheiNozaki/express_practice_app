@@ -61,6 +61,11 @@ router.put(
   usersController.update,
   usersController.redirectView,
 );
+router.delete(
+  '/users/:id/delete',
+  usersController.delete,
+  usersController.redirectView,
+);
 
 router.get(
   '/subscribers',
@@ -84,6 +89,11 @@ router.put(
   subscribersController.update,
   subscribersController.redirectView,
 );
+router.delete(
+  '/subscribers/:id/delete',
+  subscribersController.delete,
+  subscribersController.redirectView,
+);
 
 router.get('/courses', coursesController.index, coursesController.indexView);
 router.get('/courses/new', coursesController.new);
@@ -97,6 +107,11 @@ router.get('/courses/:id/edit', coursesController.edit);
 router.put(
   '/courses/:id/update',
   coursesController.update,
+  coursesController.redirectView,
+);
+router.delete(
+  '/courses/:id/delete',
+  coursesController.delete,
   coursesController.redirectView,
 );
 

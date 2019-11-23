@@ -53,6 +53,7 @@ a {
   cursor: pointer;
   display: inline-block;
   color: #fff;
+  margin-bottom: 2px;
 }
 
 .button:hover {
@@ -92,4 +93,8 @@ a {
 
 .data-form label {
   margin: 5px 0 0 0;
+}
+
+.hidden-text {
+  -webkit-text-security: disc;
 }

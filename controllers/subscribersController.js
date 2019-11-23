@@ -109,6 +109,19 @@ module.exports = {
       });
   },
 
+  delete: (req, res, next) => {
+    let subscriberId = req.params.id;
+    Subscriber.findByIdAndRemove(subscriberId)
+      .then(() => {
+        res.locals.redirect = '/subscribers';
+        next();
+      })
+      .catch(error => {
+        console.log(`Error deleting subscriber by ID: ${error.message}`);
+        next();
+      });
+  },
+
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);
