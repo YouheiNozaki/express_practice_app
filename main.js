@@ -55,6 +55,12 @@ router.post(
   usersController.redirectView,
 );
 router.get('/users/:id', usersController.show, usersController.showView);
+router.get('/users/:id/edit', usersController.edit);
+router.put(
+  '/users/:id/update',
+  usersController.update,
+  usersController.redirectView,
+);
 
 router.get(
   '/subscribers',
