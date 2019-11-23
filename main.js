@@ -78,6 +78,12 @@ router.get(
   subscribersController.show,
   subscribersController.showView,
 );
+router.get('/subscribers/:id/edit', subscribersController.edit);
+router.put(
+  '/subscribers/:id/update',
+  subscribersController.update,
+  subscribersController.redirectView,
+);
 
 router.get('/courses', coursesController.index, coursesController.indexView);
 router.get('/courses/new', coursesController.new);
@@ -87,6 +93,12 @@ router.post(
   coursesController.redirectView,
 );
 router.get('/courses/:id', coursesController.show, coursesController.showView);
+router.get('/courses/:id/edit', coursesController.edit);
+router.put(
+  '/courses/:id/update',
+  coursesController.update,
+  coursesController.redirectView,
+);
 
 router.post('/subscribe', subscribersController.saveSubscriber);
 
