@@ -42,10 +42,8 @@ router.use(
   }),
 );
 router.use(express.json());
-router.use(homeController.logRequestPaths);
 
 router.get('/', homeController.index);
-router.get('/contact', homeController.getSubscriptionPage);
 
 router.get('/users', usersController.index, usersController.indexView);
 router.get('/users/new', usersController.new);
@@ -114,8 +112,6 @@ router.delete(
   coursesController.delete,
   coursesController.redirectView,
 );
-
-router.post('/subscribe', subscribersController.saveSubscriber);
 
 router.use(errorController.logErrors);
 router.use(errorController.respondNoResourceFound);

@@ -16,7 +16,6 @@ const mongoose = require('mongoose'),
       email: {
         type: String,
         required: true,
-        lowercase: true,
         unique: true,
       },
       zipCode: {

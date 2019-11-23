@@ -1,22 +1,27 @@
 const mongoose = require('mongoose'),
-  subscriberSchema = mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
+  subscriberSchema = mongoose.Schema(
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+        lowercase: true,
+        unique: true,
+      },
+      zipCode: {
+        type: Number,
+        min: [10000, 'Zip code too short'],
+        max: 99999,
+      },
+      courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      unique: true,
+    {
+      timestamps: true,
     },
-    zipCode: {
-      type: Number,
-      min: [10000, 'Zip code too short'],
-      max: 99999,
-    },
-    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
-  });
+  );
 
 subscriberSchema.methods.getInfo = function() {
   return `
