@@ -8,7 +8,7 @@ const User = require('../models/user'),
         last: body.last,
       },
       email: body.email,
-      password: body.email,
+      password: body.password,
       zipCode: body.zipCode,
     };
   };
@@ -60,6 +60,37 @@ module.exports = {
     if (redirectPath) res.redirect(redirectPath);
     else next();
   },
+
+  login: (req, res) => {
+    res.render('users/login');
+  },
+
+  authenticate: (req, res, next) => {
+    User.findOne({
+      email: req.body.email,
+    })
+      .then(user => {
+        if (user && user.password === req.body.password) {
+          res.locals.redirect = `/users/${user._id}`;
+          req.flash('success', `${user.fullname}'s logged in successfully!`);
+          res.locals.user = user;
+          next();
+        } else {
+          req.flash(
+            'error',
+            'Your account or password is incorrect.' +
+              'Please try again or contact your system administrator!',
+          );
+          res.locals.redirect = '/users/login';
+          next();
+        }
+      })
+      .catch(error => {
+        console.log(`Error logging in user: ${error.message}`);
+        next(error);
+      });
+  },
+
   show: (req, res, next) => {
     let userId = req.params.id;
     User.findById(userId)
