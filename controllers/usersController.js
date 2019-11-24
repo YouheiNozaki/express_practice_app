@@ -1,6 +1,17 @@
 'use strict';
 
 const User = require('../models/user');
+getUserParams = body => {
+  return {
+    name: {
+      first: req.body.first,
+      last: req.body.last,
+    },
+    email: req.body.email,
+    password: req.body.email,
+    zipCode: req.body.zipCode,
+  };
+};
 
 module.exports = {
   index: (req, res, next) => {
@@ -21,15 +32,7 @@ module.exports = {
     res.render('users/new');
   },
   create: (req, res, next) => {
-    let userParams = {
-      name: {
-        first: req.body.first,
-        last: req.body.last,
-      },
-      email: req.body.email,
-      password: req.body.email,
-      zipCode: req.body.zipCode,
-    };
+    let userParams = getUserParams(req.body);
 
     User.create(userParams)
       .then(user => {
@@ -77,15 +80,8 @@ module.exports = {
   },
   update: (req, res, next) => {
     let userId = req.params.id,
-      userParams = {
-        name: {
-          first: req.body.first,
-          last: req.body.last,
-        },
-        email: req.body.email,
-        password: req.body.password,
-        zipCode: req.body.zipCode,
-      };
+      userParams = getUserParams(req.body);
+
     User.findByIdAndUpdate(userId, {
       $set: userParams,
     })

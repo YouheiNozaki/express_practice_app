@@ -1,6 +1,13 @@
 'use strict';
 
 const Subscriber = require('../models/subscriber');
+getSubscriberParams = body => {
+  return {
+    name: req.body.name,
+    email: req.body.email,
+    zipCode: parseInt(body.zipCode),
+  };
+};
 
 module.exports = {
   index: (req, res, next) => {
@@ -24,11 +31,7 @@ module.exports = {
   },
 
   create: (req, res, next) => {
-    let subscriberParams = {
-      name: req.body.name,
-      email: req.body.email,
-      zipCode: req.body.zipCode,
-    };
+    let subscriberParams = getSubscriberParams(req.body);
     Subscriber.create(subscriberParams)
       .then(subscriber => {
         res.locals.redirect = '/subscribers';
@@ -74,11 +77,7 @@ module.exports = {
 
   update: (req, res, next) => {
     let subscriberId = req.params.id,
-      subscriberParams = {
-        name: req.body.name,
-        email: req.body.email,
-        zipCode: req.body.zipCode,
-      };
+      subscriberParams = getSubscriberParams(req.body);
 
     Subscriber.findByIdAndUpdate(subscriberId, {
       $set: subscriberParams,

@@ -1,10 +1,18 @@
 'use strict';
 
-const Course = require('../models/course');
+const Course = require('../models/course'),
+  getCourseParams = body => {
+    return {
+      title: body.title,
+      description: body.description,
+      maxStudents: body.maxStudents,
+      cost: body.cost,
+    };
+  };
 
 module.exports = {
   index: (req, res, next) => {
-    Course.find({})
+    Course.find()
       .then(courses => {
         res.locals.courses = courses;
         next();
@@ -17,17 +25,13 @@ module.exports = {
   indexView: (req, res) => {
     res.render('courses/index');
   },
+
   new: (req, res) => {
     res.render('courses/new');
   },
 
   create: (req, res, next) => {
-    let courseParams = {
-      title: req.body.title,
-      description: req.body.description,
-      items: [req.body.items.split(',')],
-      zipCode: req.body.zipCode,
-    };
+    let courseParams = getCourseParams(req.body);
     Course.create(courseParams)
       .then(course => {
         res.locals.redirect = '/courses';
@@ -38,6 +42,12 @@ module.exports = {
         console.log(`Error saving course: ${error.message}`);
         next(error);
       });
+  },
+
+  redirectView: (req, res, next) => {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
   },
 
   show: (req, res, next) => {
@@ -73,12 +83,7 @@ module.exports = {
 
   update: (req, res, next) => {
     let courseId = req.params.id,
-      courseParams = {
-        title: req.body.title,
-        description: req.body.description,
-        items: [req.body.items.split(',')],
-        zipCode: req.body.zipCode,
-      };
+      courseParams = getCourseParams(req.body);
 
     Course.findByIdAndUpdate(courseId, {
       $set: courseParams,
@@ -105,11 +110,5 @@ module.exports = {
         console.log(`Error deleting course by ID: ${error.message}`);
         next();
       });
-  },
-
-  redirectView: (req, res, next) => {
-    let redirectPath = res.locals.redirect;
-    if (redirectPath !== undefined) res.redirect(redirectPath);
-    else next();
   },
 };
