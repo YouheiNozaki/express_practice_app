@@ -111,6 +111,7 @@ a {
 }
 
 .error {
+  color: #fff;
   background: rgba(209, 46, 42, 0.7);
 }
 
@@ -118,25 +119,28 @@ button[type='submit'] {
   margin-top: 20px;
 }
 
-.login-status {
+.login {
   position: absolute;
   right: 10px;
   top: 5px;
-}
-
-.log-out {
-  position: absolute;
-  right: 10px;
-}
-
-.login-status .bubble {
   padding: 10px;
   background: #c1ffc1;
   border-radius: 20px;
 }
 
+.login p {
+  margin: 0;
+}
+
+.log-out {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: #fff;
+}
+
 @media (max-width: 760px) {
-  .login-status .bubble {
+  .login {
     overflow: hidden;
     white-space: nowrap;
     font-size: 2vw;
