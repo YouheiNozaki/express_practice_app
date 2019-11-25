@@ -9,11 +9,13 @@ const express = require('express'),
   expressSession = require('express-session'),
   cookieParser = require('cookie-parser'),
   connectFlash = require('connect-flash'),
+  passport = require('passport'),
   errorController = require('./controllers/errorController'),
   homeController = require('./controllers/homeController'),
   subscribersController = require('./controllers/subscribersController'),
   usersController = require('./controllers/usersController'),
-  coursesController = require('./controllers/coursesController');
+  coursesController = require('./controllers/coursesController'),
+  User = require('./models/user');
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/recipe_db', {
@@ -43,8 +45,8 @@ router.use(
     methods: ['POST', 'GET'],
   }),
 );
-router.use(express.json());
 
+router.use(express.json());
 router.use(cookieParser('secret_passcode'));
 router.use(
   expressSession({
@@ -56,9 +58,17 @@ router.use(
     saveUninitialized: false,
   }),
 );
+
+router.use(passport.initialize());
+router.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 router.use(connectFlash());
 
 router.use((req, res, next) => {
+  res.locals.loggedIn = req.isAuthenticated();
+  res.locals.currentUser = req.user;
   res.locals.flashMessages = req.flash();
   next();
 });
@@ -74,9 +84,10 @@ router.post(
   usersController.redirectView,
 );
 router.get('/users/login', usersController.login);
-router.post(
-  '/users/login',
-  usersController.authenticate,
+router.post('/users/login', usersController.authenticate);
+router.get(
+  '/users/logout',
+  usersController.logout,
   usersController.redirectView,
 );
 router.get('/users/:id', usersController.show, usersController.showView);
