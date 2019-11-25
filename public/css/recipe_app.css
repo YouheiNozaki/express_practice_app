@@ -124,7 +124,8 @@ button[type='submit'] {
   right: 10px;
   top: 5px;
   padding: 10px;
-  background: #c1ffc1;
+  background: #697acb;
+  color: #fff;
   border-radius: 20px;
 }
 
@@ -132,11 +133,14 @@ button[type='submit'] {
   margin: 0;
 }
 
+.login a {
+  color: #fff;
+}
+
 .log-out {
   display: inline-block;
   padding: 0 8px;
   border-radius: 10px;
-  background: #fff;
 }
 
 @media (max-width: 760px) {

@@ -33,19 +33,17 @@
       </div>
       <div class="login">
         <% if (loggedIn) { %>
-        <div class="bubble logged-in">
+        <p>
           Logged in as
           <a href="<%=`/users/${currentUser._id}`%>">
             <%= currentUser.fullName %></a
           >
-        </div>
-        <div class="log-out">
-          <a href="/users/logout">Log out</a>
-        </div>
+          <span class="log-out">
+            <a href="/users/logout">Log out</a>
+          </span>
+        </p>
         <%} else {%>
-        <div class="bubble log-in">
-          <a href="/users/login">Log In</a>
-        </div>
+        <a href="/users/login">Log In</a>
         <% } %>
       </div>
     </div>
