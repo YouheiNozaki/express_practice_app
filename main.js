@@ -57,6 +57,7 @@ router.use(
   }),
 );
 router.use(connectFlash());
+
 router.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
   next();
@@ -68,6 +69,7 @@ router.get('/users', usersController.index, usersController.indexView);
 router.get('/users/new', usersController.new);
 router.post(
   '/users/create',
+  usersController.validate,
   usersController.create,
   usersController.redirectView,
 );

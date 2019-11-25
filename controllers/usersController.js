@@ -1,6 +1,7 @@
 'use strict';
 
 const User = require('../models/user'),
+  { check, sanitizeBody, validationResult } = require('express-validator'),
   getUserParams = body => {
     return {
       name: {
@@ -31,7 +32,40 @@ module.exports = {
   new: (req, res) => {
     res.render('users/new');
   },
+
+  validate: (req, res, next) => {
+    sanitizeBody('email')
+      .normalizeEmail({
+        all_lowercase: true,
+      })
+      .trim();
+    check('email', 'Email is invalid').isEmail();
+
+    check('zipCode', 'Zip code is invalid')
+      .notEmpty()
+      .isInt()
+      .isLength({
+        min: 5,
+        max: 5,
+      })
+      .equals(req.body.zipCode);
+    check('password', 'Password cannot be empty').notEmpty();
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let messages = error.array().map(e => e.msg);
+      req.skip = true;
+      req.flash('error', messages.join(' and '));
+
+      res.locals.redirect = '/users/new';
+      next();
+    } else {
+      next();
+    }
+  },
+
   create: (req, res, next) => {
+    if (req.skip) next();
     let userParams = getUserParams(req.body);
 
     User.create(userParams)
@@ -55,6 +89,7 @@ module.exports = {
         next();
       });
   },
+
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath) res.redirect(redirectPath);
@@ -157,4 +192,72 @@ module.exports = {
         next();
       });
   },
+};
+
+
+create: (req, res, next) => {
+  if (req.skip) next();
+  let userParams = getUserParams(req.body);
+  User.create(userParams)
+    .then(user => {
+      req.flash("success", `${user.fullName}'s account created successfully!`);
+      res.locals.redirect = "/users";
+      res.locals.user = user;
+      next();
+    })
+    .catch(error => {
+      console.log(`Error saving user: ${error.message}`);
+      res.locals.redirect = "/users/new";
+      req.flash("error", `Failed to create user account because: ${error.message}.`);
+      next();
+    });
+},
+redirectView: (req, res, next) => {
+  let redirectPath = res.locals.redirect;
+  if (redirectPath) res.redirect(redirectPath);
+  else next();
+},
+show: (req, res, next) => {
+  let userId = req.params.id;
+  User.findById(userId)
+    .then(user => {
+      res.locals.user = user;
+      next();
+    })
+    .catch(error => {
+      console.log(`Error fetching user by ID: ${error.message}`);
+      next(error);
+    });
+},
+validate: (req, res, next) => {
+  req
+    .sanitizeBody("email")
+    .normalizeEmail({
+      all_lowercase: true
+    })
+    .trim();
+  req.check("email", "Email is invalid").isEmail();
+  req
+    .check("zipCode", "Zip code is invalid")
+    .notEmpty()
+    .isInt()
+    .isLength({
+      min: 5,
+      max: 5
+    })
+    .equals(req.body.zipCode);
+  req.check("password", "Password cannot be empty").notEmpty();
+
+  req.getValidationResult().then(error => {
+    if (!error.isEmpty()) {
+      let messages = error.array().map(e => e.msg);
+      req.skip = true;
+      req.flash("error", messages.join(" and "));
+      res.locals.redirect = "/users/new";
+      next();
+    } else {
+      next();
+    }
+  });
+}
 };
