@@ -25,11 +25,7 @@ module.exports = {
       });
   },
   indexView: (req, res) => {
-    if (req.query.format === 'json') {
-      res.json(res.locals.courses);
-    } else {
-      res.render('courses/index');
-    }
+    res.render('courses/index');
   },
 
   new: (req, res) => {
@@ -134,11 +130,27 @@ module.exports = {
       };
     } else {
       errorObject = {
-        status: httpStatus.INTERNAL_SERVER_ERROR,
+        status: httpStatus.OK,
         message: 'Unknown Error.',
       };
     }
     res.json(errorObject);
+  },
+
+  filterUserCourses: (req, res, next) => {
+    let currentUser = res.locals.currentUser;
+    if (currentUser) {
+      let mappedCourses = res.locals.courses.map(course => {
+        let userJoined = currentUser.courses.some(userCourse => {
+          return userCourse.equals(course._id);
+        });
+        return Object.assign(course.toObject(), { joined: userJoined });
+      });
+      res.locals.courses = mappedCourses;
+      next();
+    } else {
+      next();
+    }
   },
 
   join: (req, res, next) => {
@@ -159,22 +171,6 @@ module.exports = {
         });
     } else {
       next(new Error('User must log in.'));
-    }
-  },
-
-  filterUserCourses: (req, res, next) => {
-    let currentUser = res.locals.currentUser;
-    if (currentUser) {
-      let mappedCourses = res.locals.courses.map(course => {
-        let userJoined = currentUser.courses.some(userCourse => {
-          return userCourse.equals(course._id);
-        });
-        return Object.assign(course.toObject(), { joined: userJoined });
-      });
-      res.locals.courses = mappedCourses;
-      next();
-    } else {
-      next();
     }
   },
 };

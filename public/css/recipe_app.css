@@ -124,7 +124,7 @@ button[type='submit'] {
   right: 10px;
   top: 5px;
   padding: 10px;
-  background: #697acb;
+  background: #3d41b4;
   color: #fff;
   border-radius: 20px;
 }
@@ -152,8 +152,8 @@ button[type='submit'] {
 }
 
 #modal-button {
-  background-color: #ffe7a2;
-  color: #625956;
+  background-color: #3d41b4;
+  color: white;
   border: 1px solid;
 }
 
@@ -196,6 +196,15 @@ button[type='submit'] {
   width: 20px;
   height: 40px;
   content: '';
+}
+
+.course-cost {
+  display: inline-block;
+  position: absolute;
+  right: 35px;
+  margin-top: 60px;
+  font-family: 'Baloo Bhaina';
+  font-size: 18px;
 }
 
 .modal-body {

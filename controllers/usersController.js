@@ -28,11 +28,7 @@ module.exports = {
       });
   },
   indexView: (req, res) => {
-    res.render('users/index', {
-      flashMessages: {
-        success: 'Loaded all users!',
-      },
-    });
+    res.render('users/index');
   },
   new: (req, res) => {
     res.render('users/new');
@@ -60,7 +56,7 @@ module.exports = {
   },
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath) res.redirect(redirectPath);
+    if (redirectPath !== undefined) res.redirect(redirectPath);
     else next();
   },
   show: (req, res, next) => {
@@ -75,9 +71,11 @@ module.exports = {
         next(error);
       });
   },
+
   showView: (req, res) => {
     res.render('users/show');
   },
+
   edit: (req, res, next) => {
     let userId = req.params.id;
     User.findById(userId)
@@ -91,17 +89,10 @@ module.exports = {
         next(error);
       });
   },
+
   update: (req, res, next) => {
     let userId = req.params.id,
-      userParams = {
-        name: {
-          first: req.body.first,
-          last: req.body.last,
-        },
-        email: req.body.email,
-        password: req.body.password,
-        zipCode: req.body.zipCode,
-      };
+      userParams = getUserParams(req.body);
     User.findByIdAndUpdate(userId, {
       $set: userParams,
     })
@@ -130,12 +121,6 @@ module.exports = {
   login: (req, res) => {
     res.render('users/login');
   },
-  authenticate: passport.authenticate('local', {
-    failureRedirect: '/users/login',
-    failureFlash: 'Failed to login.',
-    successRedirect: '/',
-    successFlash: 'Logged in!',
-  }),
   validate: (req, res, next) => {
     sanitizeBody('email')
       .normalizeEmail({
@@ -166,6 +151,12 @@ module.exports = {
       next();
     }
   },
+  authenticate: passport.authenticate('local', {
+    failureRedirect: '/users/login',
+    failureFlash: 'Failed to login.',
+    successRedirect: '/',
+    successFlash: 'Logged in!',
+  }),
   logout: (req, res, next) => {
     req.logout();
     req.flash('success', 'You have been logged out!');

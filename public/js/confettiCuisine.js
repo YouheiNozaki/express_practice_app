@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $('#modal-button').click(() => {
     $('.modal-body').html('');
-    $.get('/api/courses', (results = {}) => {
+    $.get(`/api/courses`, (results = {}) => {
       let data = results.data;
       if (!data || !data.courses) return;
       data.courses.forEach(course => {
@@ -10,9 +10,10 @@ $(document).ready(() => {
 						<span class="course-title">
 							${course.title}
 						</span>
-						<button class='button ${
+						<span class="course-cost">$${course.cost}</span>
+						<button class="${
               course.joined ? 'joined-button' : 'join-button'
-            }' data-id="${course._id}">
+            } btn btn-info btn-sm" data-id="${course._id}">
 							${course.joined ? 'Joined' : 'Join'}
 						</button>
 						<div class="course-description">
@@ -31,6 +32,7 @@ let addJoinButtonListener = () => {
   $('.join-button').click(event => {
     let $button = $(event.target),
       courseId = $button.data('id');
+    console.log(`/api/courses/${courseId}/join`);
     $.get(`/api/courses/${courseId}/join`, (results = {}) => {
       let data = results.data;
       if (data && data.success) {
