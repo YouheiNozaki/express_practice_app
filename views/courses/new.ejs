@@ -1,5 +1,5 @@
 <div class="data-form">
-  <form class="form-signin" action="/courses/create" method="POST">
+  <form class="form-signin" action="<%=`/courses/create`%>" method="POST">
     <h2 class="form-signin-heading">Create a new course:</h2>
     <label for="inputTitle">Title</label>
     <input
@@ -18,27 +18,28 @@
       class="form-control"
       placeholder="Description"
     />
-    <label for="inputItems">Items</label>
+    <label for="inputMaxStudents">Max Students</label>
     <input
       type="text"
-      name="items"
-      id="inputItems"
-      class="form-control"
-      placeholder="Items"
-      required
-    />
-    <label for="inputZipCode">Zip Code</label>
-    <input
-      type="text"
-      name="zipCode"
-      id="inputZipCode"
+      name="maxStudents"
+      id="inputMaxStudents"
       pattern="\d*"
       class="form-control"
-      placeholder="Zip Code"
+      placeholder="Max Students"
+      required
+    />
+    <label for="inputCost">Cost</label>
+    <input
+      type="text"
+      name="cost"
+      id="inputCost"
+      pattern="\d*"
+      class="form-control"
+      placeholder="Cost"
       required
     />
     <br /><button class="btn btn-lg btn-primary btn-block" type="submit">
-      Create
+      Save
     </button>
   </form>
 </div>

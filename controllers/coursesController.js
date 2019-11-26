@@ -1,6 +1,8 @@
 'use strict';
 
 const Course = require('../models/course'),
+  httpStatus = require('http-status-codes'),
+  User = require('../models/user'),
   getCourseParams = body => {
     return {
       title: body.title,

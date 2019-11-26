@@ -14,22 +14,17 @@
     </td>
   </tr>
   <tr>
-    <th>Items</th>
+    <th>Max Students</th>
     <td>
-      <%= course.items%>
+      <%= course.maxStudents%>
     </td>
   </tr>
   <tr>
-    <th>Zip Code</th>
-    <td>
-      <%= course.zipCode%>
-    </td>
+    <th>Cost</th>
+    <td>$ <%= course.cost%></td>
   </tr>
 </table>
 
-<div>
-  <a class="button" href="/courses">View all users</a>
-</div>
 <div>
   <a class="button" href="<%=`/courses/${course._id}/edit`%>">
     Edit Course Details
@@ -40,6 +35,10 @@
     class="button"
     href="<%= `/courses/${course._id}/delete?_method=DELETE` %>"
     onclick="return confirm('Are you sure you want to delete this record?')"
+    a
     >Delete</a
   >
+</div>
+<div>
+  <a class="button" href="/courses">View all courses</a>
 </div>
